@@ -42,9 +42,7 @@ public class UniversalReqServiceImpl : IUniversalReqService
         CancellationToken cancellationToken = default)
         => SendRequest<TRequest, TResponse>(HttpMethod.Delete, endpoint, request, headers, cancellationToken);
 
-    /// <summary>
-    /// Barcha HTTP metodlar uchun umumiy so'rov yuboruvchi yordamchi metod.
-    /// </summary>
+    
     private async Task<TResponse?> SendRequest<TRequest, TResponse>(
         HttpMethod method,
         string endpoint,
@@ -54,7 +52,6 @@ public class UniversalReqServiceImpl : IUniversalReqService
     {
         using var httpRequestMessage = new HttpRequestMessage(method, endpoint);
 
-        // GET/DELETE (body'siz) da request null bo'lishi mumkin
         if (request is not null)
         {
             httpRequestMessage.Content = JsonContent.Create(request);
@@ -80,7 +77,6 @@ public class UniversalReqServiceImpl : IUniversalReqService
                 response.StatusCode);
         }
 
-        // 204 No Content yoki bo'sh javob (masalan, ko'pchilik DELETE so'rovlarida)
         if (response.StatusCode == System.Net.HttpStatusCode.NoContent
             || response.Content.Headers.ContentLength == 0)
         {
